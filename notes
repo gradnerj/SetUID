@@ -1,0 +1,10 @@
+Left off with encryptin and decryption working on lowercase
+and uppercase. Need to add functionality to encryption algorithim that 
+handles non-alphabetic characters.
+
+TODO:
+DONE - Encryption  for non-alph chars
+DONE - Decryption for non-alph chars
+DONE - Encryption to handle new lines
+DONE - Decryption to handle new lines
+
