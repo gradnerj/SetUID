@@ -68,6 +68,10 @@ void loadList(struct EmpList* elist, FILE* dir){
   //call load list from directory
   char* firstName;
   char* lastName;
+
+
+
+
   while(1){
     ch = fgets(line, 200, dir);
     if(ch == NULL){
@@ -77,7 +81,19 @@ void loadList(struct EmpList* elist, FILE* dir){
     printf("%s", line);
     struct Employee* tempE = malloc(sizeof(struct Employee));
     struct EmpNode* tempNode = malloc(sizeof(struct EmpNode));
-    tempNode->llink = NULL;
+
+    char* token = strtok(line, ",");
+
+        tempE->lastName = token;
+        token = strtok(NULL, ",");
+        tempE->firstName = token;
+        token = strtok(NULL, ",");
+        tempE->position = token;
+        token = strtok(NULL, ",");
+        tempE->employeeID = atoi(token);
+        token = strtok(NULL, ",");
+        tempE->phone = token;
+    /*tempNode->llink = NULL;
     tempNode->rlink = NULL;
     //TODO: Need to correctly parse line into employee object
 
@@ -89,7 +105,7 @@ void loadList(struct EmpList* elist, FILE* dir){
     char* empIDtemp = strtok(line, ",");
     tempE->employeeID = atoi(empIDtemp);
     tempE->phone = strtok(line, ",");
-    tempNode->data = tempE;
+    tempNode->data = tempE;*/
     insert(elist, tempNode);
   }
   //Read current directory into list if applicable
