@@ -9,3 +9,14 @@
 /* Function Prototypes */
 
 void EmployeeDirectory(void);
+void ModifyDirectory(void);
+
+
+struct Employee{
+
+  char* lastName;
+  char* firstName;
+  char* position;
+  int employeeID;
+  char* phone;
+};

@@ -15,4 +15,4 @@ employee_directory.o: employee_directory.c
 	gcc -g -c employee_directory.c
 
 clean:
-	rm *.o SimpleToolKit
+	rm -rf *.o SimpleToolKit

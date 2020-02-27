@@ -1,8 +1,56 @@
 #include "employee_directory.h"
 
-
-
 /* Function Defenitions */
+
+//Add, update and delete employees from directory
+void ModifyDirectory(){
+  int selection = 0;
+  while(1){
+    printf("Modify Directory\n");
+    printf("1. Add Employee\n");
+    printf("2. Update Employee\n");
+    printf("3. Delete Employee\n");
+    printf("4. Back to Employee Directory Portal\n");
+    scanf(" %d", &selection);
+    while((getchar()) != '\n');
+
+    if(selection == 1){
+       printf("Add Employee - Selected...\n");
+       uid_t runningUser = getuid();
+       uid_t ownerUser = geteuid();
+
+       printf("The running user is: %d\n", runningUser);
+       printf("The owner user is: %d\n", ownerUser);
+       struct Employee e1;
+
+       printf("Adding new employee. Enter the following:\n");
+       printf("Last Name: ");
+       scanf("%s", e1.lastName);
+       //create  an employee struct instance
+       //load information from ownerUser
+       //write out in CSV format
+
+
+
+
+      // directoryFile = fopen("directory.txt", "ab+");
+
+    }
+    else{
+      break;
+    }
+
+
+  }
+
+
+
+} // end ModifyDirectory()
+
+
+
+
+
 void EmployeeDirectory(void){
   int selection = 0;
   FILE* directoryFile = NULL;
@@ -14,7 +62,7 @@ void EmployeeDirectory(void){
       printf("1. View Directory\n");
       printf("2. Modify Directory\n");
       printf("3. Update Admin Password\n");
-      printf("4. Exit\n");
+      printf("4. Back to Toolkit Main Menu\n");
       scanf(" %d", &selection);
       while((getchar()) != '\n');
 
@@ -43,16 +91,10 @@ void EmployeeDirectory(void){
           }else{
             printf("File Opened Succesfully!\n");
           }
-        //  printf("HERE1\n");
           fscanf(pwdFile, "%s", pwd);
-          //pwd = fgets(pwd, 255, pwdFile);
           printf("%s is the actual password\n", pwd );
           printf("%s is the entered password\n", adminPassword );
-
-
-
           fclose(pwdFile);
-        //  printf("HERE2\n");
           int equal = strcmp(adminPassword, pwd);
 
           remove(adminPassword);
@@ -61,12 +103,14 @@ void EmployeeDirectory(void){
             setuid(rootID);
 
             uid_t runningUser = getuid();
-          uid_t ownerUser = geteuid();
+            uid_t ownerUser = geteuid();
 
             printf("The running user is: %d\n", runningUser);
             printf("The owner user is: %d\n", ownerUser);
+            //Call Modify()
+            ModifyDirectory();
           }else{
-           printf("Incorrect Password.\n");
+           printf("RAWR! Incorrect Password.\n");
          }
 
       }
@@ -74,7 +118,7 @@ void EmployeeDirectory(void){
           printf("Update Admin Password - Selected\n");
       }
       else if(selection == 4){
-          printf("Goodbye...\n");
+          printf("Back to Main Menu...\n");
           break;
       }
       else{
