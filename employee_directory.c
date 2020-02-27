@@ -5,8 +5,10 @@
 //Add, update and delete employees from directory
 void ModifyDirectory(){
   int selection = 0;
+  struct EmpList* eList;
+
   while(1){
-    printf("Modify Directory\n");
+    printf("\nModify Directory\n");
     printf("1. Add Employee\n");
     printf("2. Update Employee\n");
     printf("3. Delete Employee\n");
@@ -16,6 +18,9 @@ void ModifyDirectory(){
 
     if(selection == 1){
        printf("Add Employee - Selected...\n");
+
+       struct EmpNode* tempNode;
+
        uid_t runningUser = getuid();
        uid_t ownerUser = geteuid();
 
@@ -26,12 +31,25 @@ void ModifyDirectory(){
        printf("Adding new employee. Enter the following:\n");
        printf("Last Name: ");
        scanf("%s", e1.lastName);
+       while((getchar()) != '\n');
+       printf("First Name: ");
+       scanf("%s", e1.firstName);
+       while((getchar()) != '\n');
+       printf("Position: ");
+       scanf("%s", e1.position);
+       while((getchar()) != '\n');
+       printf("EmployeeID: ");
+       scanf("%d", &(e1.employeeID));
+        while((getchar()) != '\n');
+       printf("Phone: ");
+       scanf("%s", e1.phone);
+        while((getchar()) != '\n');
+
+      // (*tempNode).data = &e1;
+      // insert(eList, tempNode);
        //create  an employee struct instance
        //load information from ownerUser
        //write out in CSV format
-
-
-
 
       // directoryFile = fopen("directory.txt", "ab+");
 
@@ -39,16 +57,8 @@ void ModifyDirectory(){
     else{
       break;
     }
-
-
   }
-
-
-
 } // end ModifyDirectory()
-
-
-
 
 
 void EmployeeDirectory(void){
@@ -127,4 +137,14 @@ void EmployeeDirectory(void){
       }
       while((getchar()) != '\n');
   }
+}
+
+void insert(struct EmpList* elist, struct EmpNode* enode){
+
+  if((*elist).first == NULL){ //empty list
+    (*elist).first = enode;
+    (*elist).last = enode;
+    (*elist).count++;
+  }
+
 }

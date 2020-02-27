@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+
 //#include "employee.h"
 /* Function Prototypes */
 
@@ -20,3 +21,18 @@ struct Employee{
   int employeeID;
   char* phone;
 };
+
+struct EmpNode{
+  struct EmpNode* llink;
+  struct EmpNode* rlink;
+  struct Employee* data;
+};
+
+struct EmpList{
+  struct EmpNode* first;
+  struct EmpNode* last;
+  int count;
+};
+
+//List functions
+void insert(struct EmpList* elist, struct EmpNode* enode);
