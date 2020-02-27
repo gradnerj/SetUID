@@ -210,8 +210,7 @@ void EmployeeDirectory(void){
 //  printf("The name is %s", pleaseWork);
 
 
-  printf("Printing the list\n");
-  printList(empList);
+
 
   while(1){
       selection = 0;
@@ -224,7 +223,9 @@ void EmployeeDirectory(void){
       while((getchar()) != '\n');
 
       if(selection == 1){
-         printf("View Directory - Selected...\n");
+         //printf("View Directory - Selected...\n");
+
+
          uid_t runningUser = getuid();
          uid_t ownerUser = geteuid();
 
@@ -232,6 +233,7 @@ void EmployeeDirectory(void){
          printf("The owner user is: %d\n", ownerUser);
          //directoryFile = fopen("directory.txt", "r");
 
+         printList(empList);
       }
       else if(selection == 2){
           printf("Modify Directory - Selected\n");
@@ -296,7 +298,10 @@ void printList(struct EmpList* elist){
   if(c == 0){
     printf("Empty List");
   }else{
-    printf("%d employees in the list.\n", c);
+    printf("================================================\n");
+    printf("Printing the Directory - ");
+    printf("%d employees found.\n", c);
+    printf("================================================\n");
     //struct EmpNode* temp = malloc(sizeof(struct EmpNode));
 
     //node pointer to front of list
@@ -318,22 +323,17 @@ void printList(struct EmpList* elist){
       printf("Last Name: %s\n", nodeTemp->data->lastName);
       printf("Position: %s\n", nodeTemp->data->position);
       printf("Employee ID: %d\n", nodeTemp->data->employeeID);;
-      printf("Phone: %s\n\n", nodeTemp->data->phone);
+      if(nodeTemp->rlink == NULL){
+        printf("Phone: %s", nodeTemp->data->phone);
+      }else{
+      printf("Phone: %s", nodeTemp->data->phone);
+      printf("================================================\n");
+      }
       nodeTemp = nodeTemp->rlink;
+
     }
+    printf("===================End of Directory================\n");
+    //while((getchar()) != '\n');
   }
-  /*if(elist.count == 0){
-    printf("The list is empty.\n");
-  }else{
-    struct EmpNode* temp;
-    temp = elist.first;
-    while(temp != NULL){
-      printf("%s\n", temp->data->firstName);
-      printf("%s\n", temp->data->lastName);
-      printf("%s\n", temp->data->position);
-      printf("%d\n", temp->data->employeeID);;
-      printf("%s\n\n", temp->data->phone);
-      temp = temp->rlink;
-    }
-  }*/
+
 }
