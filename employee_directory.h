@@ -36,3 +36,5 @@ struct EmpList{
 
 //List functions
 void insert(struct EmpList* elist, struct EmpNode* enode);
+void loadList(struct EmpList* elist, FILE* dir);
+void printList(struct EmpList* elist);
