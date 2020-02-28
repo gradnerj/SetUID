@@ -2,8 +2,34 @@
 
 /* Function Defenitions */
 
+void updateDirectoryFile(struct EmpList* elist){
+  FILE* dir = NULL;
+  dir = fopen("directory.txt", "w");
+  rewind(dir);
+
+  struct EmpNode* nodeTemp = NULL;
+  nodeTemp = elist->first;
+  char* str = NULL;
+
+  while(nodeTemp != NULL){
+    fprintf(dir, "%s,", nodeTemp->data->firstName);
+    fprintf(dir, "%s,", nodeTemp->data->lastName);
+    fprintf(dir, "%s,", nodeTemp->data->position);
+    fprintf(dir, "%d,", nodeTemp->data->employeeID);;
+    fprintf(dir, "%s\n", nodeTemp->data->phone);
+
+    nodeTemp = nodeTemp->rlink;
+
+  }
+
+  fclose(dir);
+  //dir = fopen(dir)
+}
+
+
+
 //Add, update and delete employees from directory
-void ModifyDirectory(){
+void ModifyDirectory(struct EmpList* elist){
   int selection = 0;
   while(1){
     printf("\nModify Directory\n");
@@ -12,47 +38,45 @@ void ModifyDirectory(){
     printf("3. Delete Employee\n");
     printf("4. Back to Employee Directory Portal\n");
     scanf(" %d", &selection);
-    while((getchar()) != '\n');
+  //  while((getchar()) != '\n');
 
     if(selection == 1){
        printf("Add Employee - Selected...\n");
 
        struct EmpNode* tempNode;
 
-       tempNode = malloc(sizeof(struct EmpNode));
+       tempNode = (struct EmpNode*) malloc(sizeof(struct EmpNode));
 
        uid_t runningUser = getuid();
        uid_t ownerUser = geteuid();
 
        printf("The running user is: %d\n", runningUser);
        printf("The owner user is: %d\n", ownerUser);
-       struct Employee e1;
-
+       struct Employee* e1 = (struct Employee * ) malloc(sizeof(struct Employee));
+       //struct Employee e1;
+        e1->lastName = (char *) malloc(25 *sizeof(char));
+        e1->firstName = (char *) malloc(25 *sizeof(char));
+        e1->position = (char *) malloc(25 *sizeof(char));
+        e1->phone = (char *) malloc(25 *sizeof(char));
        printf("Adding new employee. Enter the following:\n");
        printf("Last Name: ");
-       scanf("%s", e1.lastName);
+       scanf("%s", e1->lastName);
        while((getchar()) != '\n');
        printf("First Name: ");
-       scanf("%s", e1.firstName);
+       scanf("%s", e1->firstName);
        while((getchar()) != '\n');
        printf("Position: ");
-       scanf("%s", e1.position);
+       scanf("%s", e1->position);
        while((getchar()) != '\n');
        printf("EmployeeID: ");
-       scanf("%d", &(e1.employeeID));
+       scanf("%d", &(e1->employeeID));
         while((getchar()) != '\n');
        printf("Phone: ");
-       scanf("%s", e1.phone);
+       scanf("%s", e1->phone);
         while((getchar()) != '\n');
-
-      (*tempNode).data = &e1;
-      //insert(elist, tempNode);
-       //create  an employee struct instance
-       //load information from ownerUser
-       //write out in CSV format
-
-      // directoryFile = fopen("directory.txt", "ab+");
-
+        insert(elist, e1);
+        updateDirectoryFile(elist);
+        printList(elist);
     }
     else{
       break;
@@ -78,7 +102,7 @@ void insert(struct EmpList* elist, struct Employee* e){
     enode->rlink = NULL;
     elist->count++;
   // printf("\n%s\n","Success insert into empty list.");
-  // free(enode);
+   //free(enode);
    return;
   }
   else if(elist->first == elist->last){ // one node
@@ -164,16 +188,17 @@ void loadList(struct EmpList* elist, FILE* dir){
 
 
 void EmployeeDirectory(void){
+//  printf("here");
   int selection = 0;
   FILE* directoryFile = NULL;
   char* adminPassword = NULL;
-
+//printf("here1");
   struct EmpList* empList;
   empList = (struct EmpList * ) malloc(sizeof(struct EmpList));
 
+//printf("here2");
 
-
-  directoryFile = fopen("directory.txt", "r");
+  directoryFile = fopen("dir.txt", "r");
   //Initalize empty list
   empList->count = 0;
   empList->first = NULL;
@@ -185,33 +210,6 @@ void EmployeeDirectory(void){
   loadList(empList, directoryFile);
 
   int theCount = empList->count;
-//  printf("Load finished. The count is: %d\n", theCount);
-
-
-
-/*  struct EmpNode* tnode;
-  tnode = empList->first;
-  while(tnode->rlink != NULL){
-    printf("Moved a link\n");
-    tnode = tnode->rlink;
-  }
-  tnode = empList->first;
-  char* str = NULL;
-  str = tnode->data->firstName;
-
-
-  //works?!?!?
-  int x = tnode->data->employeeID;
-//  printf("The empID is %d", x);
-
-  char pleaseWork[15];
-  strcpy(pleaseWork, tnode->data->lastName); */
-//  pleaseWork = tnode->data->firstName;
-//  printf("The name is %s", pleaseWork);
-
-
-
-
   while(1){
       selection = 0;
       printf("\nEmployee Directory Portal:\n");
@@ -224,7 +222,6 @@ void EmployeeDirectory(void){
 
       if(selection == 1){
          //printf("View Directory - Selected...\n");
-
 
          uid_t runningUser = getuid();
          uid_t ownerUser = geteuid();
@@ -248,11 +245,11 @@ void EmployeeDirectory(void){
           if(pwdFile == NULL){
             printf("Error Opening File!\n");
           }else{
-            printf("File Opened Succesfully!\n");
+          //  printf("File Opened Succesfully!\n");
           }
           fscanf(pwdFile, "%s", pwd);
-          printf("%s is the actual password\n", pwd );
-          printf("%s is the entered password\n", adminPassword );
+          //printf("%s is the actual password\n", pwd );
+        //  printf("%s is the entered password\n", adminPassword );
           fclose(pwdFile);
           int equal = strcmp(adminPassword, pwd);
 
@@ -267,7 +264,7 @@ void EmployeeDirectory(void){
             printf("The running user is: %d\n", runningUser);
             printf("The owner user is: %d\n", ownerUser);
             //Call Modify()
-            ModifyDirectory();
+            ModifyDirectory(empList);
           }else{
            printf("RAWR! Incorrect Password.\n");
          }
@@ -324,7 +321,7 @@ void printList(struct EmpList* elist){
       printf("Position: %s\n", nodeTemp->data->position);
       printf("Employee ID: %d\n", nodeTemp->data->employeeID);;
       if(nodeTemp->rlink == NULL){
-        printf("Phone: %s", nodeTemp->data->phone);
+        printf("Phone: %s\n", nodeTemp->data->phone);
       }else{
       printf("Phone: %s", nodeTemp->data->phone);
       printf("================================================\n");

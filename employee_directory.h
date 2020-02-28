@@ -10,7 +10,7 @@
 /* Function Prototypes */
 
 void EmployeeDirectory(void);
-void ModifyDirectory(void);
+
 
 
 struct Employee{
@@ -33,8 +33,9 @@ struct EmpList{
   struct EmpNode* last;
   int count;
 };
-
+void ModifyDirectory(struct EmpList* elist);
 //List functions
 void insert(struct EmpList* elist, struct Employee* e);
 void loadList(struct EmpList* elist, FILE* dir);
 void printList(struct EmpList* elist);
+void updateDirectoryFile(struct EmpList* elist);
