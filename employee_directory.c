@@ -2,6 +2,29 @@
 
 /* Function Defenitions */
 
+int* getEmployeeIDs(struct EmpList* elist){
+  struct EmpNode* nodeTemp = NULL;
+  int* empIDArray =  malloc(sizeof(int));
+//  int testArr[20];
+  int index = 0;
+  nodeTemp = elist->first;
+  while(nodeTemp != NULL){
+    empIDArray[index++] = nodeTemp->data->employeeID;
+    //testArr[index] = nodeTemp->data->employeeID;
+  //  printf("%d\n", nodeTemp->data->employeeID)
+
+
+    if(nodeTemp->rlink != NULL){
+      empIDArray = realloc(empIDArray, sizeof(empIDArray)+ sizeof(int));
+
+   }
+   nodeTemp = nodeTemp->rlink;
+  }
+  return empIDArray;
+  //return testArr;
+}
+
+
 void updateDirectoryFile(struct EmpList* elist){
   FILE* dir = NULL;
   dir = fopen("directory.txt", "w");
@@ -15,13 +38,13 @@ void updateDirectoryFile(struct EmpList* elist){
     fprintf(dir, "%s,", nodeTemp->data->firstName);
     fprintf(dir, "%s,", nodeTemp->data->lastName);
     fprintf(dir, "%s,", nodeTemp->data->position);
-    fprintf(dir, "%d,", nodeTemp->data->employeeID);;
+    fprintf(dir, "%d,", nodeTemp->data->employeeID);
     fprintf(dir, "%s", nodeTemp->data->phone);
 
     nodeTemp = nodeTemp->rlink;
 
   }
-
+  fprintf(dir, "\n");
   fclose(dir);
   //dir = fopen(dir)
 }
@@ -42,6 +65,13 @@ void ModifyDirectory(struct EmpList* elist){
 
     if(selection == 1){
        printf("Add Employee - Selected...\n");
+
+
+       int* empIDArr = getEmployeeIDs(elist);
+       int len = sizeof(empIDArr)/2;
+       printf("Length of empIDArr is %d before adding\n", len);
+
+
 
        struct EmpNode* tempNode;
 
@@ -68,6 +98,9 @@ void ModifyDirectory(struct EmpList* elist){
        printf("Position: ");
        scanf("%s", e1->position);
        while((getchar()) != '\n');
+
+
+
        printf("EmployeeID: ");
        scanf("%d", &(e1->employeeID));
         while((getchar()) != '\n');
@@ -87,14 +120,6 @@ void ModifyDirectory(struct EmpList* elist){
 void insert(struct EmpList* elist, struct Employee* e){
   struct EmpNode* enode = (struct EmpNode *) malloc(sizeof(struct EmpNode));
   enode->data = e;
-
-  /*char* testName = NULL;
-  testName = enode->data->firstName;
-  printf("The first name inside insert function is: %s\n", testName);*/
-
-
-
-//printf("inserting now...\n");
   if(elist->first == NULL){ //empty list
     elist->first = enode;
     elist->last = enode;
@@ -187,6 +212,54 @@ void loadList(struct EmpList* elist, FILE* dir){
 }
 
 
+void printList(struct EmpList* elist){
+  //printf("HERE");
+  int c = elist->count;
+  if(c == 0){
+    printf("Empty List");
+  }else{
+    printf("================================================\n");
+    printf("Printing the Directory - ");
+    printf("%d employees found.\n", c);
+    printf("================================================\n");
+    //struct EmpNode* temp = malloc(sizeof(struct EmpNode));
+
+    //node pointer to front of list
+    struct EmpNode* nodeTemp = NULL;
+    nodeTemp = elist->first;
+    //struct Employee* eTemp = NULL;
+    //eTemp = nodeTemp->data;
+    char* str = NULL;
+    //str = nodeTemp->data->firstName;
+    //printf("%s", str);
+    //str = eTemp->firstName;
+    //struct Employee* t = NULL;
+    //str = elist->first->data->firstName;
+
+    //printf("%s", temp->data->firstName);
+
+    while(nodeTemp != NULL){
+      printf("First Name: %s\n", nodeTemp->data->firstName);
+      printf("Last Name: %s\n", nodeTemp->data->lastName);
+      printf("Position: %s\n", nodeTemp->data->position);
+      printf("Employee ID: %d\n", nodeTemp->data->employeeID);;
+      if(nodeTemp->rlink == NULL){
+        printf("Phone: %s\n", nodeTemp->data->phone);
+      }else{
+      printf("Phone: %s", nodeTemp->data->phone);
+      printf("================================================\n");
+      }
+      nodeTemp = nodeTemp->rlink;
+
+    }
+    printf("===================End of Directory================\n");
+    //while((getchar()) != '\n');
+  }
+
+}
+
+
+
 void EmployeeDirectory(void){
 //  printf("here");
   int selection = 0;
@@ -198,7 +271,7 @@ void EmployeeDirectory(void){
 
 //printf("here2");
 
-  directoryFile = fopen("dir.txt", "r");
+  directoryFile = fopen("directory.txt", "r");
   //Initalize empty list
   empList->count = 0;
   empList->first = NULL;
@@ -208,7 +281,7 @@ void EmployeeDirectory(void){
 //  empArray = 3 * malloc(sizeof(struct Employee));
 
   loadList(empList, directoryFile);
-
+  fclose(directoryFile);
   int theCount = empList->count;
   while(1){
       selection = 0;
@@ -283,54 +356,4 @@ void EmployeeDirectory(void){
       }
       while((getchar()) != '\n');
   }
-}
-
-
-
-
-
-void printList(struct EmpList* elist){
-  //printf("HERE");
-  int c = elist->count;
-  if(c == 0){
-    printf("Empty List");
-  }else{
-    printf("================================================\n");
-    printf("Printing the Directory - ");
-    printf("%d employees found.\n", c);
-    printf("================================================\n");
-    //struct EmpNode* temp = malloc(sizeof(struct EmpNode));
-
-    //node pointer to front of list
-    struct EmpNode* nodeTemp = NULL;
-    nodeTemp = elist->first;
-    //struct Employee* eTemp = NULL;
-    //eTemp = nodeTemp->data;
-    char* str = NULL;
-    //str = nodeTemp->data->firstName;
-    //printf("%s", str);
-    //str = eTemp->firstName;
-    //struct Employee* t = NULL;
-    //str = elist->first->data->firstName;
-
-    //printf("%s", temp->data->firstName);
-
-    while(nodeTemp != NULL){
-      printf("First Name: %s\n", nodeTemp->data->firstName);
-      printf("Last Name: %s\n", nodeTemp->data->lastName);
-      printf("Position: %s\n", nodeTemp->data->position);
-      printf("Employee ID: %d\n", nodeTemp->data->employeeID);;
-      if(nodeTemp->rlink == NULL){
-        printf("Phone: %s\n", nodeTemp->data->phone);
-      }else{
-      printf("Phone: %s", nodeTemp->data->phone);
-      printf("================================================\n");
-      }
-      nodeTemp = nodeTemp->rlink;
-
-    }
-    printf("===================End of Directory================\n");
-    //while((getchar()) != '\n');
-  }
-
 }

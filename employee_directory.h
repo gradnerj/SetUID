@@ -39,3 +39,4 @@ void insert(struct EmpList* elist, struct Employee* e);
 void loadList(struct EmpList* elist, FILE* dir);
 void printList(struct EmpList* elist);
 void updateDirectoryFile(struct EmpList* elist);
+int* getEmployeeIDs(struct EmpList* elist);
