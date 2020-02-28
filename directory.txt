@@ -1,9 +1,6 @@
-gradner,jeff,student,1234,3852074243
-
-carter,saige,student,34245,4342424
-
-dylan,bob,singer,9955,3423522
-
-marly,bob,singer,999,385207433
-
-david,bowie,moo,5454,4335252
+jeff,gradner,student,1234,3852074243
+saige,carter,student,34245,4342424
+bob,dylan,singer,9955,3423522
+bob,marly,singer,999,385207433
+bowie,david,moo,5454,4335252
+don,trump,pres,666,0000993

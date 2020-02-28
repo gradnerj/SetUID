@@ -16,7 +16,7 @@ void updateDirectoryFile(struct EmpList* elist){
     fprintf(dir, "%s,", nodeTemp->data->lastName);
     fprintf(dir, "%s,", nodeTemp->data->position);
     fprintf(dir, "%d,", nodeTemp->data->employeeID);;
-    fprintf(dir, "%s\n", nodeTemp->data->phone);
+    fprintf(dir, "%s", nodeTemp->data->phone);
 
     nodeTemp = nodeTemp->rlink;
 
