@@ -1,4 +1,7 @@
-jeff,gradner,student,1234,3852074243
+Jeff,Gradner,student,1234,3852074243
 saige,carter,student,34245,4342424
 bob,dylan,singer,9955,3423522
 dan,gradner,bro,777,77777
+brady,tom,qb,100,1000000
+Joe,Dirt,LB,888,909090909
+Byrant,Kobe,BBall,999,1234423224
