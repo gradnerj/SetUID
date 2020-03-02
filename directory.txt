@@ -1,7 +1,4 @@
-Jeff,Gradner,student,1234,3852074243
-saige,carter,student,34245,4342424
-bob,dylan,singer,9955,3423522
-dan,gradner,bro,777,77777
-brady,tom,qb,100,1000000
-Joe,Dirt,LB,888,909090909
-Byrant,Kobe,BBall,999,1234423224
+Jeff,gradner,stud,1,373737
+Saige,carter,stud,2,38383
+kobe,byrant,bbal,3,4747
+Mike,jordan,bball,4,575757

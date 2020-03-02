@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <sys/types.h>
-
+ #include <sys/stat.h>
 //#include "employee.h"
 /* Function Prototypes */
 
@@ -38,6 +38,7 @@ void ModifyDirectory(struct EmpList* elist);
 //List functions
 void insert(struct EmpList* elist, struct Employee* e);
 void updateEmployee(struct EmpList* elist);
+void addEmployee(struct EmpList* elist);
 struct Employee* getEmployeeByID(struct EmpList* elist, int empID);
 
 void loadList(struct EmpList* elist, FILE* dir);
