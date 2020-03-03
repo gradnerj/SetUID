@@ -1,0 +1,23 @@
+
+The admin password is "pass"
+
+Open the archived folder with tar.
+Navigate to directory with makefile.
+Type make in command line.
+execute the program with ./SimpleToolKit
+
+The program will display the main menu
+enter an integer to navigate to one of the options
+and continue to do so following the prompts. 
+
+The program starts in main. here the euid is set to the uid so that both are of the running user. 
+if the crypto menu is selected the euid is never changed.
+if the employee directory is selected then the directory file is created if it doesnt already exist
+the euid is changed to root so that the permissions on the directory file can be set and then the euid is set back to the starting user.
+if the user selects to view the directory the euid is unchanged. If the user selects to modify the directory, the euid is changed to root 
+in order to read from the password file and then the euid is set immediately back. The program then prompts the user for the admin password and if
+it is correct the euid is set to the rootID so modification of the directory file can happen. After modifyDirectory returns which includes add,update and delete
+employee then the euid is set back to the origianl users ID. If the user chooses to update the admin password root permissions are given to read the actual 
+password from the file and immediately euid is set back untill the user has entered the correct password. If the password entered by the user matches the password
+in the password file the user is given root privilages so that the new password can be written to the password file. After the new password is written the euid is 
+set back to the startID.

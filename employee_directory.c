@@ -440,20 +440,21 @@ void EmployeeDirectory(uid_t startID){
 
 if(fopen("directory.txt", "r") == NULL){
   directoryFile = fopen("directory.txt", "w");
+  uid_t rootid = 0;
+  gid_t gid = 0;
+  seteuid(rootid);
+
+
+  chown("./directory.txt", rootid, gid);
+
+  seteuid(startID);
 }
 else{
   directoryFile = fopen("directory.txt", "r");
 }
   //directoryFile = fopen("directory.txt", "ab+");
-  uid_t rootid = 0;
-  gid_t gid = 0;
-  seteuid(rootid);
 
-  //mode_t m = 644;
-  chown("./directory.txt", rootid, gid);
-  //int success = chmod("./directory.txt", m);
-  //printf("%d is the success\n", success);
-  seteuid(startID);
+
   //Initalize empty list
   empList->count = 0;
   empList->first = NULL;
