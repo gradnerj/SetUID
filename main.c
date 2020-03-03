@@ -25,6 +25,16 @@ int main(void)
     int selection = 0;
     printf("Welcome to Jeff's CS-5740 Toolkit\n");
 
+    uid_t runningUser = getuid();
+    uid_t ownerUser = geteuid();
+
+    uid_t startingUser = runningUser;
+
+    seteuid(runningUser);
+
+    printf("The running user in main() is: %d\n", getuid());
+    printf("The owner user in main() is: %d\n", geteuid());
+
     while(true){
 
         printf("\nMain Menu:\n");
@@ -43,7 +53,7 @@ int main(void)
         }
         else if(selection == 2){
             //printf("Selected Employee Directory..\n");
-            EmployeeDirectory();
+            EmployeeDirectory(startingUser);
         }
         else if(selection == 3){
             printf("Goodbye...\n");

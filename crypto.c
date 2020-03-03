@@ -274,7 +274,11 @@ void Decrypt(void){
 }
 
 void CryptoMenu(void){
+  uid_t runningUser = getuid();
+  uid_t ownerUser = geteuid();
 
+  printf("The running user in CryptoMenu() is: %d\n", runningUser);
+  printf("The owner user in CryptoMenu() is: %d\n", ownerUser);
     while(true){
         printf("\nCrypto Toolkit\n1. Encrypt\n2. Decrypt\n3. Main Menu\n");
         int input = 0;

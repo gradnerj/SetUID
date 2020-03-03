@@ -1,4 +1,1 @@
-Jeff,gradner,stud,1,373737
-Saige,carter,stud,2,38383
-kobe,byrant,bbal,3,4747
-Mike,jordan,bball,4,575757
+jeff,gradner,student,1,38383

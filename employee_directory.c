@@ -2,6 +2,68 @@
 
 /* Function Defenitions */
 
+
+void deleteEmployee(struct EmpList* elist){
+  if(elist->count == 0){
+    printf("There are no employees to delete.\n");
+    return;
+  }
+  //int empid;
+  printList(elist);
+   int* idArr = getEmployeeIDs(elist);
+   printf("Please enter the ID of the employee you would like to update: ");
+   int IDtemp = 0;
+   scanf("%d", &IDtemp);
+
+   struct EmpNode* temp;
+   temp = elist->first;
+   if(elist->count == 1){
+     elist->first = NULL;
+     elist->last = NULL;
+     elist->count--;
+     free(temp);
+     return;
+   }else{
+     while(temp != NULL){
+       if(temp->data->employeeID == IDtemp){
+         if(temp == elist->first){
+           elist->first = temp->rlink;
+           elist->first->llink = NULL;
+           temp->rlink = NULL;
+           elist->count--;
+           printf("Successfully Deleted\n");
+           free(temp);
+           return;
+         }else if(temp == elist->last){
+           elist->last = temp->llink;
+           elist->last->rlink = NULL;
+           temp->llink = NULL;
+           elist->count--;
+           printf("Successfully Deleted\n");
+           free(temp);
+           return;
+         }else{
+          temp->llink->rlink = temp->rlink;
+          temp->rlink->llink = temp->llink;
+          temp->llink = NULL;
+          temp->rlink = NULL;
+          elist->count--;
+          printf("Successfully Deleted\n");
+          free(temp);
+          return;
+         }
+       }
+       temp = temp->rlink;
+     }
+     printf("No employee deleted.\n");
+   }
+
+
+
+
+}
+
+
 int* getEmployeeIDs(struct EmpList* elist){
   struct EmpNode* nodeTemp = NULL;
   int listSize = elist->count;
@@ -79,6 +141,9 @@ struct Employee* getEmployeeByID(struct EmpList* elist, int empID){
 void updateEmployee(struct EmpList* elist){
 
  printList(elist);
+ if(elist->count == 0){
+   return;
+ }
   int* idArr = getEmployeeIDs(elist);
   printf("Please enter the ID of the employee you would like to update: ");
   int IDtemp = 0;
@@ -211,7 +276,8 @@ void ModifyDirectory(struct EmpList* elist){
       updateEmployee(elist);
     }
     else if(selection == 3){
-      printf("delete an employee\n");
+      printf("Delete Employee - Selected\n");
+      deleteEmployee(elist);
     }
     else{
       updateDirectoryFile(elist);
@@ -280,17 +346,13 @@ void loadList(struct EmpList* elist, FILE* dir){
     //tempNode->data = tempE;
 
     char* token = strtok(line, ",");
+    tempE->firstName = (char *) malloc(25 *sizeof(char));
+    strcpy(tempE->firstName, token);
 
 
-        //const char* c = token;
-      //  strcpy(tempE->lastName, c);
+     token = strtok(NULL, ",");
      tempE->lastName = (char *) malloc(25 *sizeof(char));
      strcpy(tempE->lastName, token);
-      //  tempE->lastName = token;
-      //  printf("%s is the last name\n", token);
-     token = strtok(NULL, ",");
-     tempE->firstName = (char *) malloc(25 *sizeof(char));
-     strcpy(tempE->firstName, token);
       //  tempE->firstName = token;
       //  printf("%s is the first name\n", token);
         token = strtok(NULL, ",");
@@ -300,8 +362,16 @@ void loadList(struct EmpList* elist, FILE* dir){
         token = strtok(NULL, ",");
         tempE->employeeID = atoi(token);
 
-        token = strtok(NULL, ",");
+        token = strtok(NULL, "\n");
         tempE->phone =  (char *) malloc(25 *sizeof(char));
+
+        /*int len;
+
+        len = strlen(nodeTemp->data->phone);
+        if( nodeTemp->data->phone[len-1] == '\n' ){
+            nodeTemp->data->phone[len-1] = 0;
+          }*/
+        //printf("Phone token in loadList %s\n", token);
         strcpy(tempE->phone, token);
         //tempE->phone = token;
         //tempE has correct info...
@@ -359,21 +429,31 @@ void printList(struct EmpList* elist){
 
 }
 
-void EmployeeDirectory(void){
-//  printf("here");
+void EmployeeDirectory(uid_t startID){
+
   int selection = 0;
   FILE* directoryFile = NULL;
   char* adminPassword = NULL;
-//printf("here1");
+
   struct EmpList* empList;
   empList = (struct EmpList * ) malloc(sizeof(struct EmpList));
 
-//printf("here2");
-
+if(fopen("directory.txt", "r") == NULL){
+  directoryFile = fopen("directory.txt", "w");
+}
+else{
   directoryFile = fopen("directory.txt", "r");
+}
+  //directoryFile = fopen("directory.txt", "ab+");
+  uid_t rootid = 0;
+  gid_t gid = 0;
+  seteuid(rootid);
 
- //mode_t m = 644;
-  //chmod("directory.txt", 644);
+  //mode_t m = 644;
+  chown("./directory.txt", rootid, gid);
+  //int success = chmod("./directory.txt", m);
+  //printf("%d is the success\n", success);
+  seteuid(startID);
   //Initalize empty list
   empList->count = 0;
   empList->first = NULL;
@@ -385,6 +465,9 @@ void EmployeeDirectory(void){
   fclose(directoryFile);
   int theCount = empList->count;
   while(1){
+
+    printf("The running user in EmpDir() is: %d\n", getuid());
+    printf("The owner user in EmpDir() is: %d\n", geteuid());
       selection = 0;
       printf("\nEmployee Directory Portal:\n");
       printf("1. View Directory\n");
@@ -395,15 +478,8 @@ void EmployeeDirectory(void){
       while((getchar()) != '\n');
 
       if(selection == 1){
-         //printf("View Directory - Selected...\n");
-
-         uid_t runningUser = getuid();
-         uid_t ownerUser = geteuid();
-
-         printf("The running user is: %d\n", runningUser);
-         printf("The owner user is: %d\n", ownerUser);
-         //directoryFile = fopen("directory.txt", "r");
-
+         printf("The running user is: %d\n", getuid());
+         printf("The owner user is: %d\n", geteuid());
          printList(empList);
       }
       else if(selection == 2){
@@ -413,7 +489,8 @@ void EmployeeDirectory(void){
           scanf("%s", adminPassword);
           FILE* pwdFile = NULL;
           char pwd[255];
-
+          uid_t rootID = 0;
+          seteuid(rootID);
           pwdFile = fopen("password.txt", "r");
 
           if(pwdFile == NULL){
@@ -425,20 +502,20 @@ void EmployeeDirectory(void){
           //printf("%s is the actual password\n", pwd );
         //  printf("%s is the entered password\n", adminPassword );
           fclose(pwdFile);
+          seteuid(startID);
           int equal = strcmp(adminPassword, pwd);
 
           remove(adminPassword);
           if(equal == 0){
             uid_t rootID = 0;
-            setuid(rootID);
+            seteuid(rootID);
 
-            uid_t runningUser = getuid();
-            uid_t ownerUser = geteuid();
+            printf("The running user right before modify is: %d\n", getuid());
+            printf("The owner user right before modify is: %d\n", geteuid());
 
-            printf("The running user is: %d\n", runningUser);
-            printf("The owner user is: %d\n", ownerUser);
-            //Call Modify()
             ModifyDirectory(empList);
+            seteuid(startID);
+
           }else{
            printf("RAWR! Incorrect Password.\n");
          }
@@ -446,6 +523,42 @@ void EmployeeDirectory(void){
       }
       else if(selection == 3){
           printf("Update Admin Password - Selected\n");
+          printf("Please enter the super-secure administrative password: ");
+          adminPassword = malloc(25);
+          scanf("%s", adminPassword);
+          FILE* pwdFile = NULL;
+          char pwd[255];
+
+          uid_t rootID = 0;
+          seteuid(rootID);
+
+          printf("The running user in update password is: %d\n", getuid());
+          printf("The owner user in update password is: %d\n", geteuid());
+
+          pwdFile = fopen("password.txt", "r");
+
+          if(pwdFile == NULL){
+            printf("Error Opening File!\n");
+          }
+
+          fscanf(pwdFile, "%s", pwd);
+          //printf("%s is the actual password\n", pwd );
+        //  printf("%s is the entered password\n", adminPassword );
+          fclose(pwdFile);
+          seteuid(startID);
+          int equal = strcmp(adminPassword, pwd);
+
+          remove(adminPassword);
+          if(equal == 0){
+            printf("Please enter a new password: ");
+            char newPassword[255];
+            scanf("%s", newPassword);
+            seteuid(rootID);
+              pwdFile = fopen("password.txt", "w");
+              fprintf(pwdFile, "%s", newPassword);
+              fclose(pwdFile);
+            seteuid(startID);
+          }
       }
       else if(selection == 4){
           printf("Back to Main Menu...\n");

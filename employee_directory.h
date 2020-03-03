@@ -10,7 +10,7 @@
 //#include "employee.h"
 /* Function Prototypes */
 
-void EmployeeDirectory(void);
+void EmployeeDirectory(uid_t startID);
 
 
 
@@ -37,6 +37,7 @@ struct EmpList{
 void ModifyDirectory(struct EmpList* elist);
 //List functions
 void insert(struct EmpList* elist, struct Employee* e);
+void deleteEmployee(struct EmpList* elist);
 void updateEmployee(struct EmpList* elist);
 void addEmployee(struct EmpList* elist);
 struct Employee* getEmployeeByID(struct EmpList* elist, int empID);
